@@ -13,10 +13,13 @@ import br.com.fuctura.m2.model.util.Conexao;
 
 public class ContaDAOImpl implements ContaDAO {
 	Conexao conexao = new Conexao();
+	
 	@Override
 	public void salvar(Conta conta) {
 		Connection conn = conexao.getConnection();
+		
 		String sql = "INSERT INTO CONTA(NUMERO, SALDO, LIMITE)" + "VALUES(?, ?, ?)";
+		
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, conta.getNumero());
@@ -33,8 +36,8 @@ public class ContaDAOImpl implements ContaDAO {
 
 	@Override
 	public void alterar(Conta conta) {
-		Conexao conexao = new Conexao();
 		Connection conn = conexao.getConnection();
+		
 		String sql = "UPDATE CONTA SET SALDO=?, LIMITE=? WHERE NUMERO=?";
 
 		try {
