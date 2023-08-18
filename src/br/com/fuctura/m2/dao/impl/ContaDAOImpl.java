@@ -118,7 +118,7 @@ public class ContaDAOImpl implements ContaDAO {
 				conta.setSaldo(rs.getDouble("SALDO"));
 				conta.setLimite(rs.getDouble("LIMITE"));
 				retorno.add(conta);
-
+				ps.executeUpdate();
 			}
 		}catch(Exception e) {
 			System.out.println("Erro: "+e.getMessage());

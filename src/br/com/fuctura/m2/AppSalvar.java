@@ -1,17 +1,31 @@
 package br.com.fuctura.m2;
 
 import br.com.fuctura.m2.dao.ContaDAO;
+import br.com.fuctura.m2.dao.EnderecoDAO;
 import br.com.fuctura.m2.dao.impl.ContaDAOImpl;
+import br.com.fuctura.m2.dao.impl.EnderecoDAOImpl;
 import br.com.fuctura.m2.model.Conta;
+import br.com.fuctura.m2.model.Endereco;
 
 public class AppSalvar {
 	public static void main(String[] args) {
-		Conta conta2 = new Conta();
+		Conta conta = new Conta();
 		ContaDAO contaDao = new ContaDAOImpl();
-		conta2.setNumero(1004);
-		conta2.setSaldo(100.0);
-		conta2.setLimite(400.0);
-		contaDao.salvar(conta2);
+		conta.setNumero(1004);
+		conta.setSaldo(100.0);
+		conta.setLimite(400.0);
+		contaDao.salvar(conta);
+		
+		
+		Endereco endereco = new Endereco();
+		EnderecoDAO enderecoDAO = new EnderecoDAOImpl();
+		
+		endereco.setId(endereco.getId());
+		endereco.setRua("Rua Toni Carrado");
+		endereco.setNumero("3458");
+		endereco.setComplemento("Próxmo a CHEST");
+		enderecoDAO.salvar(endereco);
+		
 	}
 
 }
