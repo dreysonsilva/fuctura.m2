@@ -1,5 +1,4 @@
 package br.com.fuctura.m2.dao.impl;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,12 +12,17 @@ import br.com.fuctura.m2.model.util.Conexao;
 
 public class ContaDAOImpl implements ContaDAO {
 	Conexao conexao = new Conexao();
+	Connection conn = conexao.getConnection();
+	Conta conta = new Conta();
 	
+	/**-------------------------------------------------------------------------------------------------------------
+	 * SALVAR CONTA
+	 * @author DREYSON SANTIAGO
+	 -------------------------------------------------------------------------------------------------------------* */
 	@Override
-	public void salvar(Conta conta) {
-		Connection conn = conexao.getConnection();
+	public void salvar(Conta conta) {	
 		
-		String sql = "INSERT INTO CONTA(NUMERO, SALDO, LIMITE)" + "VALUES(?, ?, ?)";
+		String sql = "INSERT INTO CONTA(NUMERO, SALDO, LIMITE) VALUES(?, ?, ?)";
 		
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -26,17 +30,22 @@ public class ContaDAOImpl implements ContaDAO {
 			ps.setDouble(2, conta.getSaldo());
 			ps.setDouble(3, conta.getLimite());
 			ps.execute();
+			
 			System.out.println("Conta inserida com sucesso");
+			
 		} catch (SQLException e) {
-			System.out.println("Erro SQL: " + e.getMessage());
+			System.out.println("Erro ao inserir conta no banco. " + e.getMessage());
 		} finally {
 			conexao.fecharConexao(conn);
 		}
 	}
-
+	
+	/**-------------------------------------------------------------------------------------------------------------
+	 * ALTERAR CONTA
+	 * @author DREYSON SANTIAGO
+	 -------------------------------------------------------------------------------------------------------------* */
 	@Override
 	public void alterar(Conta conta) {
-		Connection conn = conexao.getConnection();
 		
 		String sql = "UPDATE CONTA SET SALDO=?, LIMITE=? WHERE NUMERO=?";
 
@@ -45,19 +54,22 @@ public class ContaDAOImpl implements ContaDAO {
 			ps.setInt(1, conta.getNumero());
 			ps.setDouble(2, conta.getSaldo());
 			ps.setDouble(3, conta.getLimite());
-			ps.execute();
-			System.out.println("Conta atualizada com sucesso");
+			ps.executeUpdate();
+			System.out.println("Conta atualizada com sucesso.");
 		} catch (Exception e) {
-			System.out.println("Erro: " + e.getMessage());
+			System.out.println("Erro ao atualizar conta. " + e.getMessage());
 		} finally {
 			conexao.fecharConexao(conn);
 		}
 	}
 
+	/**-------------------------------------------------------------------------------------------------------------
+	 * REMOVER CONTA                                                              
+	 * @author DREYSON SANTIAGO                 
+	 -------------------------------------------------------------------------------------------------------------* */
 	@Override
 	public void remover(int numero) {
-		Connection conn = conexao.getConnection();
-
+		
 		String sql = "DELETE FROM CONTA WHERE NUMERO=?";
 
 		try {
@@ -66,20 +78,21 @@ public class ContaDAOImpl implements ContaDAO {
 			ps.execute();
 			System.out.println("Conta removida com sucesso");
 		} catch (SQLException e) {
-			System.out.println("ERRO SQLExc " + e.getMessage());
+			System.out.println("ERRO ao remover conta do banco. "+ e.getMessage());
 		} catch (Exception e) {
-			System.out.println("ERRO Exception: " + e.getMessage());
+			System.out.println("ERRO Exception. "+ e.getMessage());
 		} finally {
 			conexao.fecharConexao(conn);
 		}
 	}
 
+	/**-------------------------------------------------------------------------------------------------------------
+	 * PESQUISAR_POR_NUMERO CONTA
+	 * @author DREYSON SANTIAGO
+	 -------------------------------------------------------------------------------------------------------------* */
 	@Override
 	public Conta pesquisarPorNumero(int numero) {
-		Connection conn = conexao.getConnection();
 		
-		Conta conta = new Conta();
-
 		String sql = "SELECT * FROM CONTA WHERE NUMERO=?";
 
 		try {
@@ -97,19 +110,24 @@ public class ContaDAOImpl implements ContaDAO {
 		} finally {
 			conexao.fecharConexao(conn);
 		}
+		
 		return conta;
 	}
 
+	/**-------------------------------------------------------------------------------------------------------------
+	 * LISTA_TODOS CONTA
+	 * @author DREYSON SANTIAGO
+	 -------------------------------------------------------------------------------------------------------------* */
 	@Override
-	public List<Conta> listarTodos() {
-		Connection conn = conexao.getConnection();
-			
+	public List<Conta> listarTodos() {	
+		
 		List<Conta> retorno = new ArrayList<Conta>();
 		
 		String sql = "SELECT * FROM CONTA";
 		
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
+			
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -121,11 +139,11 @@ public class ContaDAOImpl implements ContaDAO {
 				ps.executeUpdate();
 			}
 		}catch(Exception e) {
-			System.out.println("Erro: "+e.getMessage());
+			System.out.println("Erro ao listar conta no banco. "+e.getMessage());
 		}finally {
 			conexao.fecharConexao(conn);
 		}
+		
 		return retorno;
 	}
-
 }
